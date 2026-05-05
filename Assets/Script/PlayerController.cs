@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player2D : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float runSpeed = 8f;
