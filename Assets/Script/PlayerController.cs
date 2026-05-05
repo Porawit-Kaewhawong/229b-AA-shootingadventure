@@ -2,20 +2,32 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement")]
     public float moveSpeed = 5f;
     public float runSpeed = 8f;
     public float jumpForce = 15f;
+
+    [Header("Shooting")]
+    public GameObject ballPrefab;
+    public Transform firePoint;
+    public float shootForce = 15f;
 
     private Rigidbody2D rb;
     private bool isGrounded;
 
     void Start()
     {
+        DontDestroyOnLoad(this);
         rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Shoot();
+        }
+
         Move();
         Jump();
     }
@@ -43,5 +55,30 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true;
         }
+    }
+
+    public void resetPosition()
+    {
+        transform.position = new Vector3(0, -3, 0);
+    }
+
+    void Shoot()
+    {
+
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0;
+
+
+        GameObject ball = Instantiate(ballPrefab, firePoint.position, Quaternion.identity);
+        Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
+
+
+        Vector2 direction = (mousePos - firePoint.position).normalized;
+
+
+        rb.AddForce(direction * shootForce, ForceMode2D.Impulse);
+
+
+        Destroy(ball, 1f);
     }
 }
