@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class PlayerController : MonoBehaviour
@@ -11,9 +12,10 @@ public class PlayerController : MonoBehaviour
     [Header("Health & UI")]
     public int maxHealth = 5;
     private int currentHealth;
-    public float invincibilityDuration = 1.5f;
+    public float invincibilityDuration = 0.5f;
     private float invincibilityTimer;
     public TextMeshProUGUI healthText;
+    public Image gameOverPanel;
 
     [Header("Shooting")]
     public GameObject ballPrefab;
@@ -85,6 +87,7 @@ public class PlayerController : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            
             Die();
         }
     }
@@ -99,7 +102,8 @@ public class PlayerController : MonoBehaviour
 
     void Die()
     {
-        Destroy(gameObject);
+        gameOverPanel.gameObject.SetActive(true);
+        Time.timeScale = 0f;
     }
 
     public void resetPosition()

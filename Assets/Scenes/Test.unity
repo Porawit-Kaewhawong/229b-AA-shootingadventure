@@ -1008,6 +1008,7 @@ MonoBehaviour:
   - {fileID: 415704526}
   - {fileID: 1127365250}
   speed: 2
+  maxHealth: 3
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -1506,6 +1507,10 @@ MonoBehaviour:
   moveSpeed: 5
   runSpeed: 8
   jumpForce: 15
+  maxHealth: 5
+  invincibilityDuration: 0.5
+  healthText: {fileID: 0}
+  gameOverPanel: {fileID: 0}
   ballPrefab: {fileID: 0}
   firePoint: {fileID: 0}
   shootForce: 15
@@ -1863,6 +1868,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1430913852}
   - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 255515535}
@@ -1871,4 +1877,3 @@ SceneRoots:
   - {fileID: 441589038}
   - {fileID: 347057773}
   - {fileID: 150172591}
-  - {fileID: 1430913852}
