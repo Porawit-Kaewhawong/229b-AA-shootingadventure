@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -6,6 +7,13 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;
     public float runSpeed = 8f;
     public float jumpForce = 15f;
+
+    [Header("Health & UI")]
+    public int maxHealth = 5;
+    private int currentHealth;
+    public float invincibilityDuration = 1.5f;
+    private float invincibilityTimer;
+    public TextMeshProUGUI healthText;
 
     [Header("Shooting")]
     public GameObject ballPrefab;
@@ -19,10 +27,17 @@ public class PlayerController : MonoBehaviour
     {
         DontDestroyOnLoad(this);
         rb = GetComponent<Rigidbody2D>();
+        currentHealth = maxHealth;
+        UpdateHealthUI();
     }
 
     void Update()
     {
+        if (invincibilityTimer > 0)
+        {
+            invincibilityTimer -= Time.deltaTime;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Shoot();
@@ -36,7 +51,6 @@ public class PlayerController : MonoBehaviour
     {
         float move = Input.GetAxis("Horizontal");
         float speed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : moveSpeed;
-
         rb.linearVelocity = new Vector2(move * speed, rb.linearVelocity.y);
     }
 
@@ -55,6 +69,37 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true;
         }
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            TakeDamage(1);
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (invincibilityTimer > 0) return;
+
+        currentHealth -= damage;
+        invincibilityTimer = invincibilityDuration;
+        UpdateHealthUI();
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    void UpdateHealthUI()
+    {
+        if (healthText != null)
+        {
+            healthText.text = "HP: " + currentHealth;
+        }
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 
     public void resetPosition()
@@ -64,20 +109,14 @@ public class PlayerController : MonoBehaviour
 
     void Shoot()
     {
-
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0;
 
-
         GameObject ball = Instantiate(ballPrefab, firePoint.position, Quaternion.identity);
-        Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
-
+        Rigidbody2D ballRb = ball.GetComponent<Rigidbody2D>();
 
         Vector2 direction = (mousePos - firePoint.position).normalized;
-
-
-        rb.AddForce(direction * shootForce, ForceMode2D.Impulse);
-
+        ballRb.AddForce(direction * shootForce, ForceMode2D.Impulse);
 
         Destroy(ball, 1f);
     }

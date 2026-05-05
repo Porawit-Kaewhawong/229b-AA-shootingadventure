@@ -6,8 +6,11 @@ public class Key : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        PlayerController player = collision.GetComponent<PlayerController>();
-        Destroy(target);
-        Destroy(gameObject);
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerController player = collision.GetComponent<PlayerController>();
+            Destroy(target);
+            Destroy(gameObject);
+        }
     }
 }

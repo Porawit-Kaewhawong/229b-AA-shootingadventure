@@ -11,8 +11,7 @@ public class Teleporter : MonoBehaviour
         {
             PlayerController player = collision.GetComponent<PlayerController>();
             player.resetPosition();
+            SceneManager.LoadScene(sceneName);
         }
-
-        SceneManager.LoadScene(sceneName);
     }
 }
